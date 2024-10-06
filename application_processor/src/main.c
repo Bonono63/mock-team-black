@@ -5,7 +5,8 @@
 #include <mxc_delay.h>
 #include "mxc.h"
 
-#define I2C_INST MXC_I2C1 //i have no fucking clue what im doing its 2am 
+// I2C interface
+#define I2C_INST MXC_I2C1 //i have no fucking clue what im doing its 2am
 #define I2C_SPEED 10000 //idk random value 
 #define I2C_ADDR 0x50 //hardcode this later for testing
 
@@ -19,8 +20,10 @@ void readData(uint8_t slave, uint8_t *buffer, int length){
 
 
 int main(void)
-{       
+{      
+        // Why do we do this, What does this do
         MXC_ICC_Enable(MXC_ICC0); //it does a thing possibly
+        // Why are we doing this?!??!
         MXC_SYS_Clock_Select(MXC_SYS_CLOCK_IPO);
         MXC_I2C_Init(I2C_INST, I2C_SPEED, 0);
         MXC_I2C_SetFrequency(I2C_INST, I2C_SPEED);
