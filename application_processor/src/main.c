@@ -6,16 +6,27 @@
 #include "mxc.h"
 
 // I2C interface
-#define I2C_INST MXC_I2C1 //i have no fucking clue what im doing its 2am
+#define I2C_INTERFACE MXC_I2C1 //i have no fucking clue what im doing its 2am
 #define I2C_SPEED 10000 //idk random value 
+// I2C address
 #define I2C_ADDR 0x50 //hardcode this later for testing
 
 
-void writeData(unit8_t master, uint8_t *data, int length){
-        MXC_I2C_MasterWrite(I2C_INST, master, data, length, 0);
+void writeData(uint8_t master, uint8_t *data, int length){
+        mxc_i2c_req_t request = {
+                // I2C buffer memory address
+                .i2c = I2C_INTERFACE,
+                // The component id of the recipient
+                .addr = ,
+                // Number of bytes to write to the I2C buffer
+                .tx_len = length,
+                .tx_buf = (uint8_t*)register,
+                .
+        };
+        MXC_I2C_MasterTransaction(I2C_INT, master, data, length, 0);
 }
 void readData(uint8_t slave, uint8_t *buffer, int length){
-        MXC_I2C_MasterRead(I2C_MASTER, slave_addr, buffer, length, 0);
+        MXC_I2C_Read(I2C_INT, slave_addr, buffer, length, 0);
 }
 
 
@@ -25,7 +36,14 @@ int main(void)
         MXC_ICC_Enable(MXC_ICC0); //it does a thing possibly
         // Why are we doing this?!??!
         MXC_SYS_Clock_Select(MXC_SYS_CLOCK_IPO);
-        MXC_I2C_Init(I2C_INST, I2C_SPEED, 0);
+
+        //Initialize I2C
+        int i2c_success = MXC_I2C_Init(I2C_INTERFACE, I2C_SPEED, 0);
+        if (!i2c_success)
+        {
+                printf("I2C failed to initialize.\n[Error] %d\n", i2c_success);
+        }
+
         MXC_I2C_SetFrequency(I2C_INST, I2C_SPEED);
 
         uint8_t dataToSend = 0x55;
